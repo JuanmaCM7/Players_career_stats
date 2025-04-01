@@ -1,7 +1,6 @@
 # Evitar archivos sensibles
 .env
 config.json
-*.ipynb  # (opcional, si no quieres subir notebooks)
 __pycache__/
 *.pyc
 
