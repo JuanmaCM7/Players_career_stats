@@ -3,6 +3,8 @@
 config.json
 __pycache__/
 *.pyc
+Instrucciones_proy_abril.md
+
 
 # Archivos de VSCode
 .vscode/
@@ -10,3 +12,4 @@ __pycache__/
 # Datos locales
 data/raw/
 data/processed/
+sql/
