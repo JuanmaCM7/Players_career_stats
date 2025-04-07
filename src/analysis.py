@@ -2,7 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-# Ruta a la carpeta de imágenes
 images_path = Path(__file__).resolve().parent.parent / "images"
 images_path.mkdir(parents=True, exist_ok=True)
 
@@ -115,6 +114,72 @@ def run_all_analyses(df, save=False):
 
 def run_analysis(df):
     run_all_analyses(df, save=True)
+
+# -------------------- FUNCIONES DE LAMINE --------------------
+
+def resumen_lamine(df):
+    print("📊 Análisis de la carrera de Lamine Yamal:")
+    print(f"Total de partidos: {len(df)}")
+    print(f"Total de goles: {df['Goals'].sum()}")
+    print(f"Total de asistencias: {df['Assists'].sum()}")
+    print(f"Promedio de minutos por partido: {df['Minutes'].mean():.1f}")
+    print()
+
+def goles_asistencias_por_edad(df, save=False):
+    resumen = df.groupby("Age")[["Goals", "Assists"]].sum()
+    resumen.plot(kind="bar", title="Goles y Asistencias por Edad")
+    plt.ylabel("Cantidad")
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "lamine_goles_asistencias_por_edad.png")
+        print("🖼️ Guardado: lamine_goles_asistencias_por_edad.png")
+    plt.show()
+
+def minutos_por_temporada(df, save=False):
+    resumen = df.groupby("Season")["Minutes"].sum()
+    resumen.plot(kind="bar", title="Minutos por Temporada")
+    plt.ylabel("Minutos")
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "lamine_minutos_por_temporada.png")
+        print("🖼️ Guardado: lamine_minutos_por_temporada.png")
+    plt.show()
+
+def titular_vs_suplente(df, save=False):
+    resumen = df["Lineup"].value_counts()
+    resumen.plot(kind="pie", autopct="%1.1f%%", title="Titular vs Suplente")
+    plt.ylabel("")
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "lamine_titular_vs_suplente.png")
+        print("🖼️ Guardado: lamine_titular_vs_suplente.png")
+    plt.show()
+
+def local_vs_visitante_lamine(df, save=False):
+    resumen = df["Home/Away"].value_counts()
+    resumen.plot(kind="bar", title="Local vs Visitante")
+    plt.ylabel("Cantidad de partidos")
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "lamine_local_vs_visitante.png")
+        print("🖼️ Guardado: lamine_local_vs_visitante.png")
+    plt.show()
+
+def scatter_minutos_por_edad(df, save=False):
+    df.plot.scatter(x="Age", y="Minutes", title="Minutos jugados por Edad", alpha=0.6)
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "lamine_minutos_por_edad.png")
+        print("🖼️ Guardado: lamine_minutos_por_edad.png")
+    plt.show()
+
+def run_analysis_lamine(df, save=True):
+    resumen_lamine(df)
+    goles_asistencias_por_edad(df, save)
+    minutos_por_temporada(df, save)
+    titular_vs_suplente(df, save)
+    local_vs_visitante_lamine(df, save)
+    scatter_minutos_por_edad(df, save)
 
 
 

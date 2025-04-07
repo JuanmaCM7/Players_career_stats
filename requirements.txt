@@ -15,6 +15,7 @@ decorator @ file:///opt/conda/conda-bld/decorator_1643638310831/work
 executing @ file:///opt/conda/conda-bld/executing_1646925071911/work
 fastjsonschema==2.21.1
 fonttools @ file:///C:/b/abs_4crkswws2h/croot/fonttools_1737040078745/work
+greenlet==3.1.1
 h11 @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/h11_1729040746371/work
 idna @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/idna_1729038997316/work
 ipykernel @ file:///C:/b/abs_6c9ggygp01/croot/ipykernel_1737660720620/work
@@ -26,6 +27,7 @@ jsonschema-specifications==2024.10.1
 jupyter_client @ file:///C:/Users/dev-admin/cr_pywin32-feedstock/jupyter_client_1737578476951/work
 jupyter_core @ file:///C:/Users/dev-admin/cr_pywin32-feedstock/jupyter_core_1737578310964/work
 kiwisolver @ file:///C:/b/abs_faf90xet7a/croot/kiwisolver_1737040915779/work
+lxml==5.3.0
 MarkupSafe @ file:///C:/b/abs_a0ma7ge0jc/croot/markupsafe_1738584052792/work
 matplotlib==3.10.0
 matplotlib-inline @ file:///C:/Users/dev-admin/buildout/croot/matplotlib-inline_1732914206474/work
@@ -49,6 +51,7 @@ psutil @ file:///C:/b/abs_b5gv3mn55h/croot/psutil_1736371546320/work
 pure-eval @ file:///opt/conda/conda-bld/pure_eval_1646925070566/work
 pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
 Pygments @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pygments_1729039250192/work
+PyMySQL==1.1.1
 pyparsing @ file:///C:/Users/dev-admin/buildout/croot/pyparsing_1735861809022/work
 PyQt6==6.7.1
 PyQt6_sip @ file:///C:/b/abs_28s7k4h_hl/croot/pyqt-split_1740498234166/work/pyqt_sip
@@ -69,6 +72,7 @@ six @ file:///tmp/build/80754af9/six_1644875935023/work
 sniffio @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/sniffio_1729040228331/work
 sortedcontainers @ file:///tmp/build/80754af9/sortedcontainers_1623949099177/work
 soupsieve @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/soupsieve_1729039543636/work
+SQLAlchemy==2.0.40
 stack-data @ file:///opt/conda/conda-bld/stack_data_1646927590127/work
 tenacity @ file:///C:/Users/dev-admin/buildout/perseverance-python-buildout/croot/tenacity_1731701966482/work
 tornado @ file:///C:/Users/dev-admin/buildout/croot/tornado_1735843426044/work
