@@ -1,15 +1,25 @@
-# Evitar archivos sensibles
+# ▓ Archivos y carpetas que NO queremos subir
+
+# Datos CSV
+*.csv
+
+# Carpeta con scripts SQL u otros datos privados
+/sql/
+
+# Archivos de configuración sensible
 .env
 config.json
+
+# Archivos temporales/intermedios de Python
 __pycache__/
 *.pyc
-Instrucciones_proy_abril.md
 
+# Instrucciones del proyecto (documentos internos)
+instrucciones_proy_abril/
 
-# Archivos de VSCode
+# Configuraciones de VSCode
 .vscode/
 
-# Datos locales
-data/raw/
-data/processed/
-sql/
+# Entornos virtuales (por si tenés uno local)
+.venv/
+env/
