@@ -85,6 +85,22 @@ def goals_by_month(df, save=False):
         print("🖼️ Guardado: goles_por_mes.png")
     plt.show()
 
+    # ... (resto del analysis.py igual que antes)
+
+def plot_local_vs_visitante(df, save=False):
+    resumen = df.groupby("Home/Away")[["Goals", "Assists"]].sum()
+    print("\n📊 Goles y asistencias - Home vs Away:\n", resumen)
+
+    resumen.plot(kind="bar", title="Goles y Asistencias - Home vs Away")
+    plt.ylabel("Total")
+    plt.xlabel("Condición de Juego")
+    plt.xticks(rotation=0)
+    plt.tight_layout()
+    if save:
+        plt.savefig(images_path / "local_vs_visitante.png")
+        print("🖼️ Guardado: local_vs_visitante.png")
+    plt.show()
+
 def run_all_analyses(df, save=False):
     print("📊 Análisis completo de la carrera de Messi:\n")
     total_goals(df)
@@ -95,4 +111,11 @@ def run_all_analyses(df, save=False):
     average_goals_per_match(df)
     assists_total_and_by_season(df, save=save)
     goals_by_month(df, save=save)
+    plot_local_vs_visitante(df, save=save)
+
+def run_analysis(df):
+    run_all_analyses(df, save=True)
+
+
+
 
