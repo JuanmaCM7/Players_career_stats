@@ -1,53 +1,82 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import os
+from pathlib import Path
 
-def scrape_messi_data(url, raw_path="data/raw/messi_raw_data.csv"):
-    """Scrapea los datos de Messi desde una URL y los agrega a un CSV sin duplicar registros."""
+# Detectar la raíz del proyecto
+project_root = Path(__file__).resolve().parent.parent
+raw_path = project_root / "data/raw/messi_raw_data.csv"
+raw_path.parent.mkdir(parents=True, exist_ok=True)
 
+# Lista de URLs que querés scrapear
+URL_LIST = [
+    "https://www.messistats.com/en/games/0/0/all/0/2/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/3/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/4/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/5/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/6/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/7/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/8/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/9/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/10/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/11/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/12/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/13/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/14/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/15/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/16/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/17/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/18/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/19/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/20/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/21/0/t/0/0/0/1",
+    "https://www.messistats.com/en/games/0/0/all/0/24/0/t/0/0/0/1",
+]
+
+def scrape_messi_data(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
-    data = []
-    
-    # Extraer encabezados correctamente formateados
     headers = [
         "Index", "Date", "Competition", "Home Team", "Result", "Away Team",
         "Lineup", "Minutes", "Goals", "Assists", "Cards", "Jersey", "Extra"
     ]
 
-    # Extraer datos de la tabla
+    data = []
     for row in soup.find_all("tr"):
         cols = [col.text.strip() for col in row.find_all("td")]
         if cols:
             data.append(cols)
 
-    df_new = pd.DataFrame(data, columns=headers[:len(data[0])])  # Ajustar columnas dinámicamente
+    if not data:
+        return pd.DataFrame()  # Nada que agregar
 
-    # Verificar si el CSV ya existe
-    if os.path.exists(raw_path):
-        try:
-            df_old = pd.read_csv(raw_path, on_bad_lines='skip', dtype=str)
-        except pd.errors.ParserError as e:
-            print(f"⚠️ Error leyendo el archivo CSV: {e}")
-            df_old = pd.DataFrame(columns=headers)
+    df_new = pd.DataFrame(data, columns=headers[:len(data[0])])
+    return df_new
 
-        # Asegurar que las columnas coinciden antes de concatenar
-        if not df_old.empty and list(df_old.columns) != list(df_new.columns):
-            print(f"⚠️ Diferente estructura de columnas entre el archivo existente y los nuevos datos.")
-            return
-        
-        df = pd.concat([df_old, df_new], ignore_index=True)
+def scrape_multiple_urls(url_list=URL_LIST):
+    all_data = []
+
+    for url in url_list:
+        print(f"🌐 Scrapeando: {url}")
+        df_url = scrape_messi_data(url)
+        if not df_url.empty:
+            all_data.append(df_url)
+
+    if not all_data:
+        print("⚠️ No se encontraron datos.")
+        return
+
+    df_total = pd.concat(all_data, ignore_index=True)
+
+    if raw_path.exists():
+        df_existing = pd.read_csv(raw_path, dtype=str, on_bad_lines='skip')
+        df_combined = pd.concat([df_existing, df_total], ignore_index=True)
     else:
-        df = df_new
+        df_combined = df_total
 
-    # Eliminar duplicados basados en Date, Home Team y Away Team
-    df.drop_duplicates(subset=["Date", "Home Team", "Away Team"], keep='last', inplace=True)
-
-    # Guardar los datos en modo append sin sobrescribir encabezados si ya existe
-    df.to_csv(raw_path, mode='w', header=True, index=False, encoding="utf-8")
-
-    print(f"📂 Datos actualizados y guardados en {raw_path}")
-
-    return df
+    # Eliminar duplicados por campos clave
+    df_combined.drop_duplicates(subset=["Date", "Home Team", "Away Team"], keep="last", inplace=True)
+    df_combined.to_csv(raw_path, index=False, encoding="utf-8")
+    print(f"✅ CSV actualizado: {raw_path} con {len(df_combined)} registros.")
+    return df_combined
