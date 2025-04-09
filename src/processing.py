@@ -1,13 +1,53 @@
-# processing.py — Messi + Lamine
-
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
 import re
 
+# -------------------- FUNCIONES AUXILIARES --------------------
+
+def deducir_equipo_jugador(row, jugador="Messi"):
+    temporada = row["Season"]
+    comp = str(row["Competition"])
+    home = row["Home Team"]
+    away = row["Away Team"]
+
+    if pd.isna(temporada) or pd.isna(comp):
+        return "Unknown"
+
+    if jugador == "Messi":
+        if "argentina" in comp.lower() or home == "Argentina" or away == "Argentina":
+            return "Argentina"
+        elif temporada <= "2020-2021":
+            return "FC Barcelona"
+        elif temporada in ["2021-2022", "2022-2023"]:
+            return "Paris Saint-Germain"
+        elif temporada >= "2023-2024":
+            return "Inter Miami CF"
+    elif jugador == "Lamine":
+        if "spain" in comp.lower() or home == "Spain" or away == "Spain":
+            return "Spain"
+        else:
+            return "FC Barcelona"
+    return "Unknown"
+
+def obtener_rival(row):
+    player_team = row["Player_Team"]
+    home = row["Home Team"]
+    away = row["Away Team"]
+
+    if pd.isna(player_team) or pd.isna(home) or pd.isna(away):
+        return None
+
+    if player_team == home and away != player_team:
+        return away
+    elif player_team == away and home != player_team:
+        return home
+    else:
+        return None
+
 # -------------------- MESSI --------------------
 
-def process_data(input_rel="data/raw/messi_raw_data.csv", output_rel="data/processed/messi_cleaned_data.csv", return_df=False):
+def process_data(input_rel="data/raw/messi_raw_data.csv", output_rel="data/processed/messi_cleaned_data.csv", return_df=False, decimal=","):
     project_root = Path(__file__).resolve().parent.parent
     input_path = project_root / input_rel
     output_path = project_root / output_rel
@@ -37,45 +77,26 @@ def process_data(input_rel="data/raw/messi_raw_data.csv", output_rel="data/proce
 
     birthdate = pd.to_datetime("1987-06-24")
     df["Age"] = df["Date"].apply(lambda d: round((d - birthdate).days / 365.25, 2) if pd.notna(d) else None)
+    df["Player"] = "Leo Messi"
 
-    def clasificar_equipo(season, competition):
-        if pd.isna(season) or pd.isna(competition):
-            return "Unknown"
-        if "argentina" in competition.lower() or "national" in competition.lower():
-            return "Argentina"
-        elif season <= "2020-2021":
-            return "FC Barcelona"
-        elif season in ["2021-2022", "2022-2023"]:
-            return "Paris Saint-Germain"
-        elif season >= "2023-2024":
-            return "Inter Miami"
-        return "Unknown"
+    df["Player_Team"] = df.apply(lambda row: deducir_equipo_jugador(row, "Messi"), axis=1)
+    df["Home/Away"] = df.apply(lambda row: "Home" if row["Home Team"] == row["Player_Team"] else "Away", axis=1)
 
-    df["Messi_Team"] = df.apply(lambda row: clasificar_equipo(row["Season"], row["Competition"]), axis=1)
+    df["Rival_Team_Name"] = df.apply(obtener_rival, axis=1)
 
-    def fue_local(row):
-        if pd.isna(row["Home Team"]) or pd.isna(row["Messi_Team"]):
-            return "Unknown"
-        return "Home" if row["Home Team"] == row["Messi_Team"] else "Away"
+    df["Age"] = df["Age"].apply(lambda x: f"{x:.2f}".replace(".", ",") if pd.notna(x) else "")
 
-    df["Home/Away"] = df.apply(fue_local, axis=1)
-
-    cols = ["Date", "Season", "Age", "Messi_Team", "Home/Away"] + [col for col in df.columns if col not in ["Date", "Season", "Age", "Messi_Team", "Home/Away"]]
+    cols = ["Date", "Season", "Age", "Player", "Player_Team", "Home/Away", "Competition", "Home Team", "Result", "Away Team", "Rival_Team_Name", "Lineup", "Minutes", "Goals", "Assists", "Cards"]
     df = df[cols]
 
-    df["Minutes"] = df["Minutes"].fillna(0).astype(int)
-    df["Goals"] = df["Goals"].fillna(0).astype(int)
-    df["Assists"] = df["Assists"].fillna(0).astype(int)
-    df["Cards"] = df["Cards"].fillna(0).astype(int)
-
-    df.to_csv(output_path, index=False)
+    df.to_csv(output_path, index=False, sep=",", decimal=decimal, encoding="utf-8")
     print(f"✅ Datos procesados guardados en: {output_path}")
     if return_df:
         return df
 
 # -------------------- LAMINE --------------------
 
-def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="data/processed/lamine_cleaned_data.csv", return_df=True):
+def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="data/processed/lamine_cleaned_data.csv", return_df=True, decimal=","):
     project_root = Path(__file__).resolve().parent.parent
     input_path = project_root / input_rel
     output_path = project_root / output_rel
@@ -94,10 +115,11 @@ def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="da
 
     df_yamal["Season"] = df_yamal["Date"].apply(asignar_temporada)
     df_yamal["Age"] = df_yamal["Date"].apply(lambda d: round((d - birthdate).days / 365.25, 2) if pd.notna(d) else None)
-    df_yamal["Home/Away"] = df_yamal["Venue"].apply(lambda v: "Home" if v == "Home" else "Away")
     df_yamal["Lineup"] = df_yamal["Start"].apply(lambda s: "Starter" if s == "Y" else "Substitute")
-    df_yamal["Squad"] = df_yamal["Squad"].str.replace(r"^[a-z]{2}\s", "", regex=True)
-    df_yamal["Opponent"] = df_yamal["Opponent"].str.replace(r"^[a-z]{2}\s", "", regex=True)
+
+    # Eliminar prefijos tipo 'eng ', 'nir ', etc.
+    df_yamal["Squad"] = df_yamal["Squad"].str.replace(r"^[a-z]{2,3}\s", "", regex=True)
+    df_yamal["Opponent"] = df_yamal["Opponent"].str.replace(r"^[a-z]{2,3}\s", "", regex=True)
 
     TEAM_NAME_FIXES = {
         "Barcelona": "FC Barcelona",
@@ -123,7 +145,21 @@ def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="da
         "Alavés": "Alavés",
         "Rayo Vallecano": "Rayo Vallecano",
         "Getafe": "Getafe",
-        "Cádiz": "Cádiz"
+        "Cádiz": "Cádiz",
+        "Bayern Munich": "Bayern München",
+        "Young Boys": "Young Boys",
+        "Dortmund": "Borussia Dortmund",
+        "Red Star": "Red Star Belgrade",
+        "Valladolid": "Real Valladolid",
+        "Andorra": "Andorra",
+        "Cyprus": "Cyprus",
+        "Georgia": "Georgia",
+        "Denmark": "Denmark",
+        "Serbia": "Serbia",
+        "Monaco": "AS Monaco",
+        "Atalanta": "Atalanta",
+        "England": "England",
+        "Northern Ireland": "Northern Ireland"
     }
 
     df_yamal["Squad"] = df_yamal["Squad"].replace(TEAM_NAME_FIXES)
@@ -136,6 +172,8 @@ def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="da
         if valor.startswith(("W", "D", "L")):
             partes = valor.split(" ")
             return partes[1] if len(partes) > 1 else None
+        if valor.isdigit():  # <-- corregir errores como '3'
+            return f"{valor}-{valor}"
         return valor.replace("–", "-")
 
     df_yamal["Result"] = df_yamal["Result"].apply(limpiar_resultado)
@@ -152,32 +190,39 @@ def process_lamine_data(input_rel="data/raw/lamine_raw_data.csv", output_rel="da
     }
     df_yamal["Comp"] = df_yamal["Comp"].replace(COMP_FIXES)
 
-    df_cleaned_yamal = pd.DataFrame()
-    df_cleaned_yamal["Date"] = df_yamal["Date"]
-    df_cleaned_yamal["Season"] = df_yamal["Season"]
-    df_cleaned_yamal["Age"] = df_yamal["Age"]
-    df_cleaned_yamal["Messi_Team"] = "FC Barcelona"
-    df_cleaned_yamal["Home/Away"] = df_yamal["Home/Away"]
-    df_cleaned_yamal["Competition"] = df_yamal["Comp"]
-    df_cleaned_yamal["Home Team"] = df_yamal.apply(lambda row: row["Squad"] if row["Venue"] == "Home" else row["Opponent"], axis=1)
-    df_cleaned_yamal["Result"] = df_yamal["Result"]
-    df_cleaned_yamal["Away Team"] = df_yamal.apply(lambda row: row["Opponent"] if row["Venue"] == "Home" else row["Squad"], axis=1)
-    df_cleaned_yamal["Lineup"] = df_yamal["Lineup"]
+    df_cleaned = pd.DataFrame()
+    df_cleaned["Date"] = df_yamal["Date"]
+    df_cleaned["Season"] = df_yamal["Season"]
+    df_cleaned["Age"] = df_yamal["Age"].apply(lambda x: f"{x:.2f}".replace(".", ",") if pd.notna(x) else "")
+    df_cleaned["Player"] = "Lamine Yamal"
+
+    df_cleaned["Home Team"] = df_yamal.apply(lambda row: row["Squad"] if row["Venue"] == "Home" else row["Opponent"], axis=1)
+    df_cleaned["Away Team"] = df_yamal.apply(lambda row: row["Opponent"] if row["Venue"] == "Home" else row["Squad"], axis=1)
+    df_cleaned["Competition"] = df_yamal["Comp"]
+    df_cleaned["Result"] = df_yamal["Result"]
+    df_cleaned["Lineup"] = df_yamal["Lineup"]
 
     for col in ["Min", "Gls", "Ast", "CrdY"]:
-        df_cleaned_yamal[col] = pd.to_numeric(df_yamal.get(col, 0), errors="coerce").fillna(0).astype(int)
+        df_cleaned[col] = pd.to_numeric(df_yamal.get(col, 0), errors="coerce").fillna(0).astype(int)
 
-    df_cleaned_yamal.rename(columns={
+    df_cleaned.rename(columns={
         "Min": "Minutes",
         "Gls": "Goals",
         "Ast": "Assists",
         "CrdY": "Cards"
     }, inplace=True)
 
-    df_cleaned_yamal.to_csv(output_path, index=False)
+    df_cleaned["Player_Team"] = df_cleaned.apply(lambda row: "Spain" if "international" in row["Competition"].lower() else "FC Barcelona", axis=1)
+    df_cleaned["Home/Away"] = df_cleaned.apply(lambda row: "Home" if row["Home Team"] == row["Player_Team"] else "Away", axis=1)
+    df_cleaned["Rival_Team_Name"] = df_cleaned.apply(lambda row: row["Away Team"] if row["Player_Team"] == row["Home Team"] else row["Home Team"], axis=1)
+
+    df_cleaned.to_csv(output_path, index=False, sep=",", encoding="utf-8", decimal=decimal)
     print(f"✅ Datos procesados guardados en: {output_path}")
     if return_df:
-        return df_cleaned_yamal
+        return df_cleaned
+
+
+# -------------------- EJECUCIÓN --------------------
 
 if __name__ == "__main__":
     process_data()

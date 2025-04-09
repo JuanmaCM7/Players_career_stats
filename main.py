@@ -19,8 +19,8 @@ if __name__ == "__main__":
     scrape_lamine_data()
 
     print("\n🧹 Procesando datos...")
-    df_messi = process_data(return_df=True)
-    df_lamine = process_lamine_data(return_df=True)
+    df_messi = process_data(return_df=True, decimal=",")
+    df_lamine = process_lamine_data(return_df=True, decimal=",")
 
     print("\n📊 Análisis Messi:")
     run_analysis(df_messi)
