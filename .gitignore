@@ -20,6 +20,6 @@ instrucciones_proy_abril/
 # Configuraciones de VSCode
 .vscode/
 
-# Entornos virtuales (por si tenés uno local)
+# Entornos virtuales (por si tienes uno local)
 .venv/
 env/

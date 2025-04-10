@@ -2,15 +2,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+# Definimos la ruta donde se guardarán las imágenes de las gráficas
 images_path = Path(__file__).resolve().parent.parent / "images"
 images_path.mkdir(parents=True, exist_ok=True)
 
+# -------------------- FUNCIONES DE MESSI --------------------
+
 def total_goals(df):
+    """Muestra y retorna el total de goles en el dataset."""
     total = df['Goals'].sum()
     print(f"⚽ Total de goles de Messi en la carrera: {total}")
     return total
 
 def goals_by_year(df, save=False):
+    """Goles por año calendario (basado en la fecha del partido)."""
     df["Year"] = df["Date"].dt.year
     goles_por_año = df.groupby("Year")["Goals"].sum()
     print("\n📈 Goles por año:\n", goles_por_año)
@@ -25,6 +30,7 @@ def goals_by_year(df, save=False):
     plt.show()
 
 def goals_by_season(df, save=False):
+    """Goles totales por temporada futbolística."""
     goles_por_temporada = df.groupby("Season")["Goals"].sum().sort_index()
     print("\n📅 Goles por temporada:\n", goles_por_temporada)
 
@@ -36,6 +42,7 @@ def goals_by_season(df, save=False):
     plt.show()
 
 def goals_by_competition(df, save=False):
+    """Goles según la competición (La Liga, Champions, etc.)."""
     goles_por_competicion = df.groupby('Competition')['Goals'].sum().sort_values(ascending=False)
     print("\n🏆 Goles por competición:\n", goles_por_competicion)
 
@@ -47,6 +54,7 @@ def goals_by_competition(df, save=False):
     plt.show()
 
 def goals_per_minute(df):
+    """Promedio de minutos por gol (minutos jugados / goles marcados)."""
     total_goals_ = df['Goals'].sum()
     total_minutes = pd.to_numeric(df['Minutes'], errors='coerce').sum()
     if total_goals_ > 0:
@@ -56,10 +64,12 @@ def goals_per_minute(df):
         print("⏱️ No hay goles suficientes para calcular promedio.")
 
 def average_goals_per_match(df):
+    """Promedio de goles por partido."""
     promedio = df['Goals'].mean()
     print(f"📊 Promedio de goles por partido: {promedio:.2f}")
 
 def assists_total_and_by_season(df, save=False):
+    """Total de asistencias + asistencias por temporada."""
     total = df['Assists'].sum()
     print(f"🎯 Total de asistencias: {total}")
 
@@ -74,6 +84,7 @@ def assists_total_and_by_season(df, save=False):
     plt.show()
 
 def goals_by_month(df, save=False):
+    """Distribución de goles por mes del año."""
     df['Month'] = df['Date'].dt.month
     goles_por_mes = df.groupby('Month')['Goals'].sum()
 
@@ -84,9 +95,8 @@ def goals_by_month(df, save=False):
         print("🖼️ Guardado: goles_por_mes.png")
     plt.show()
 
-    # ... (resto del analysis.py igual que antes)
-
 def plot_local_vs_visitante(df, save=False):
+    """Comparativa entre goles y asistencias jugando de local vs visitante."""
     resumen = df.groupby("Home/Away")[["Goals", "Assists"]].sum()
     print("\n📊 Goles y asistencias - Home vs Away:\n", resumen)
 
@@ -101,6 +111,7 @@ def plot_local_vs_visitante(df, save=False):
     plt.show()
 
 def run_all_analyses(df, save=False):
+    """Ejecuta todos los análisis para Messi."""
     print("📊 Análisis completo de la carrera de Messi:\n")
     total_goals(df)
     goals_by_year(df, save=save)
@@ -118,6 +129,7 @@ def run_analysis(df):
 # -------------------- FUNCIONES DE LAMINE --------------------
 
 def resumen_lamine(df):
+    """Resumen numérico básico de la carrera de Lamine Yamal."""
     print("📊 Análisis de la carrera de Lamine Yamal:")
     print(f"Total de partidos: {len(df)}")
     print(f"Total de goles: {df['Goals'].sum()}")
@@ -126,6 +138,7 @@ def resumen_lamine(df):
     print()
 
 def goles_asistencias_por_edad(df, save=False):
+    """Goles y asistencias agrupados por edad."""
     resumen = df.groupby("Age")[["Goals", "Assists"]].sum()
     resumen.plot(kind="bar", title="Goles y Asistencias por Edad")
     plt.ylabel("Cantidad")
@@ -136,6 +149,7 @@ def goles_asistencias_por_edad(df, save=False):
     plt.show()
 
 def minutos_por_temporada(df, save=False):
+    """Total de minutos jugados por temporada."""
     resumen = df.groupby("Season")["Minutes"].sum()
     resumen.plot(kind="bar", title="Minutos por Temporada")
     plt.ylabel("Minutos")
@@ -146,6 +160,7 @@ def minutos_por_temporada(df, save=False):
     plt.show()
 
 def titular_vs_suplente(df, save=False):
+    """Distribución de partidos como titular o suplente."""
     resumen = df["Lineup"].value_counts()
     resumen.plot(kind="pie", autopct="%1.1f%%", title="Titular vs Suplente")
     plt.ylabel("")
@@ -156,6 +171,7 @@ def titular_vs_suplente(df, save=False):
     plt.show()
 
 def local_vs_visitante_lamine(df, save=False):
+    """Distribución de partidos jugados en casa vs fuera (solo cantidad)."""
     resumen = df["Home/Away"].value_counts()
     resumen.plot(kind="bar", title="Local vs Visitante")
     plt.ylabel("Cantidad de partidos")
@@ -166,6 +182,7 @@ def local_vs_visitante_lamine(df, save=False):
     plt.show()
 
 def scatter_minutos_por_edad(df, save=False):
+    """Dispersión de minutos jugados según la edad."""
     df.plot.scatter(x="Age", y="Minutes", title="Minutos jugados por Edad", alpha=0.6)
     plt.tight_layout()
     if save:
@@ -174,12 +191,15 @@ def scatter_minutos_por_edad(df, save=False):
     plt.show()
 
 def run_analysis_lamine(df, save=True):
+    """Ejecuta todos los análisis para Lamine."""
     resumen_lamine(df)
     goles_asistencias_por_edad(df, save)
     minutos_por_temporada(df, save)
     titular_vs_suplente(df, save)
     local_vs_visitante_lamine(df, save)
     scatter_minutos_por_edad(df, save)
+
+
 
 
 
