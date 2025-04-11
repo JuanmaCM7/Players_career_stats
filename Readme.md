@@ -112,7 +112,7 @@ Cada prueba incluye:
 
 ```bash
 # 1. Clona el repo
-git clone https://github.com/JuanmaCM7/Messi_career_stats.git
+git clone https://github.com/JuanmaCM7/Players_career_stats.git
 cd Players_career_stats
 
 # 2. Instala dependencias
