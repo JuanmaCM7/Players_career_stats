@@ -1,5 +1,3 @@
-# SPANISH
-
 # ⚽ Proyecto: A NEW STAR IS BORN: Análisis completo y comparativo de las carreras de Messi y Lamine Yamal
 
 En este proyecto encontraremos el proceso completo de ciencia de datos aplicado a un caso futbolístico real, con todos sus datos correspondientes y necesarios. A través del análisis comparativo de Lionel Messi y Lamine Yamal, buscamos responder preguntas clave sobre el rendimiento y la evolución de ambos, así como la proyección de Lamine, utilizando técnicas de scraping, procesamiento y limpieza, análisis estadístico, visualización y tests de hipótesis.
