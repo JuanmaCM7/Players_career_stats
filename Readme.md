@@ -1,188 +1,167 @@
-# Proyecto: Análisis Comparativo de las Carreras de Messi y Lamine Yamal
+# SPANISH
 
-Este proyecto forma parte de una entrega académica que integra los conocimientos adquiridos en procesos ETL, análisis exploratorio de datos (EDA), estadística descriptiva, visualización interactiva y presentación narrativa de resultados.
+# ⚽ Proyecto: A NEW STAR IS BORN: Análisis completo y comparativo de las carreras de Messi y Lamine Yamal
 
-El objetivo principal es **extraer, procesar, analizar y visualizar** los datos de carrera de **Lionel Messi** y **Lamine Yamal**, comparando sus trayectorias desde una perspectiva estadística y visual.
-
----
-
-## 🌍 Contexto y Justificación
-
-Ambos jugadores representan momentos muy distintos del espectro futbolístico: uno en el ocaso de su carrera con una trayectoria legendaria; el otro, una promesa emergente. Este contraste lo hace ideal para aplicar herramientas de ciencia de datos:
-
-- Evaluar **rendimiento individual** y tendencias temporales.
-- Comparar el impacto de la edad, los equipos y el contexto de los partidos.
-- Aplicar visualizaciones interactivas para comunicar hallazgos de forma clara.
+En este proyecto encontraremos el proceso completo de ciencia de datos aplicado a un caso futbolístico real, con todos sus datos correspondientes y necesarios. A través del análisis comparativo de Lionel Messi y Lamine Yamal, buscamos responder preguntas clave sobre el rendimiento y la evolución de ambos, así como la proyección de Lamine, utilizando técnicas de scraping, procesamiento y limpieza, análisis estadístico, visualización y tests de hipótesis.
 
 ---
 
-## 🔄 Flujo del Proyecto y Componentes
+## 🌍 Contexto del Proyecto
 
-### 1. Extracción de Datos (ETL)
-
-**Archivo:** `src/scraping.py`
-
-- **Messi:** datos obtenidos de [messistats.com](https://messistats.com), temporada por temporada.
-- **Lamine Yamal:** datos de partidos extraídos de [fbref.com](https://fbref.com) mediante `pandas.read_html()`.
-- Se automatiza la descarga y guardado en formato `.csv` en la carpeta `data/raw/`.
-- Uso de `time.sleep` y validaciones para evitar bloqueos por scraping.
-
-> Resultado: `messi_raw_data.csv` y `lamine_raw_data.csv`
+Lionel Messi representa la la definición de la excelencia futbolística tras más de 20 años de carrera. Lamine Yamal es uno de los talentos más prometedores del fútbol mundial. Con este contraste entre leyenda y promesa conseguiremos explorar patrones y diferencias en los datos.
 
 ---
 
-### 2. Procesamiento y Limpieza
-
-**Archivo:** `src/processing.py`
-
-- Limpieza de columnas con saltos de línea o nombres inconsistentes.
-- Conversión de fechas al formato datetime y generación de columna "Season".
-- Cálculo de **edad** al momento de cada partido.
-- Asignación del equipo correspondiente según año y competición.
-- Clasificación local/visitante, y determinación del rival.
-- Homologación de nombres de clubes, resultados y competiciones para Lamine.
-
-> Resultado: `messi_cleaned_data.csv` y `lamine_cleaned_data.csv` en `data/processed/`
-
----
-
-### 3. Análisis Estadístico y Exploratorio (EDA)
-
-**Archivo:** `src/analysis.py`
-
-El análisis se divide entre Messi y Lamine, y genera tanto estadísticas como gráficas:
-
-#### ✅ Messi
-- **Total de goles y asistencias**
-- **Goles por año calendario** y **temporada futbolística**
-- **Promedio de goles por partido y por minuto**
-- **Goles por competición (Liga, Champions, etc.)**
-- **Comparación local vs visitante**
-- **Distribución mensual de goles**
-
-#### ✅ Lamine
-- Total de partidos, goles y asistencias
-- Goles y asistencias por edad
-- Minutos jugados por temporada
-- Distribución de partidos como titular vs suplente
-- Local vs visitante
-- Minutos jugados por edad (gráfico de dispersión)
-
-> Las imágenes generadas se guardan en la carpeta `images/`
-
----
-
-### 4. Dashboard Interactivo (Power BI)
-
-**Archivo:** `dashboard/Players_career_data.pbix`
-
-Este archivo contiene un informe en Power BI con:
-
-- Indicadores clave (KPI) como promedio de goles, asistencias, edad, etc.
-- Visualizaciones temporales: líneas de goles/asistencias por temporada.
-- Comparación por tipo de competición y condición de juego (local/visitante).
-- Análisis de madurez deportiva (edad vs minutos jugados).
-
-Este dashboard complementa las visualizaciones estáticas con interactividad y permite un storytelling fluido.
-
----
-
-### 5. Notebook de Pruebas
-
-**Archivo:** `notebooks/Tests.ipynb`
-
-Cuaderno de pruebas usado para explorar datos de forma rápida, probar funciones individuales o validar formatos durante el desarrollo.
-
----
-
-### 6. Entorno y Dependencias
-
-**Archivos:**
-- `requirements.txt`
-- `environment.yml`
-
-Incluyen todas las dependencias necesarias para reproducir el entorno: pandas, matplotlib, beautifulsoup4, requests, etc.
-
----
-
-## 📆 Estructura del Repositorio
+## 📁 Estructura del Proyecto
 
 ```
 proyecto/
-├── dashboard/                      # Archivo .pbix (Power BI)
-├── designs/                        # Imagen de portada y branding
+├── dashboard/                      # Dashboard Power BI (.pbix)
+│   └── Players_career_data.pbix
+├── designs/                        # Recursos visuales de portada
 ├── data/
-│   ├── raw/                        # Datos obtenidos por scraping
-│   └── processed/                 # Datos limpios y transformados
-├── images/                         # Gráficas estáticas generadas
+│   ├── raw/                        # Datos crudos extraídos de la web
+│   └── processed/                  # Datos limpios y transformados
+├── gifs/                           # GIFs demostrativos (main.py, PowerBI)
+├── images/                         # Visualizaciones guardadas como PNG
 ├── notebooks/
-│   └── Tests.ipynb                # Exploración preliminar
-├── src/
-│   ├── scraping.py                # Obtención de datos web
-│   ├── processing.py              # Limpieza y transformación
-│   ├── analysis.py                # Análisis y visualizaciones
-│   ├── db.py                      # Conexión con base de datos (opcional)
-│   └── main.py                    # Flujo ejecutable del proyecto
+│   └── Tests.ipynb                 # Pruebas y exploraciones estadísticas
+├── src/                            # Módulos fuente del proyecto
+│   ├── scraping.py                 # Scraping de datos (Messi y Lamine)
+│   ├── processing.py               # Limpieza, enriquecimiento, normalización
+│   ├── analysis.py                 # Análisis exploratorio, visualizaciones
+│   ├── db.py                       # Conexión con base de datos (opcional)
+│   └── main.py                     # Ejecución completa del flujo ETL + análisis
 ├── requirements.txt
 ├── environment.yml
-├── Instrucciones_proy_abril.md    # Enunciado del proyecto
-└── README.md                      # Documentación general
+└── README.md                       # Documentación e instrucciones del proyecto
 ```
 
 ---
 
-## 🤖 Reproducibilidad
+## 🔁 Flujo del Proyecto
+
+### 1. Extracción (scraping.py)
+
+- `scraping.py` automatiza la recolección de datos:
+  - Messi: desde `messistats.com` (por temporada).
+  - Lamine: desde `fbref.com` (por año).
+- Guarda los CSV crudos en `data/raw/`.
+- Créditos a ambas webs por facilitar estos maravillosos datos.
+
+---
+
+### 2. Procesamiento (processing.py)
+
+- `processing.py` limpia y transforma los datos:
+  - Homogeneiza competiciones, nombres de rivales, equipos.
+  - Calcula edad, condición local/visitante, y rival real.
+  - Añade columnas como `Season`, `Age`, `Player_Team`, `Rival_Team_Name`, etc.
+- Exporta los resultados limpios a `data/processed/`.
+
+---
+
+### 3. Análisis Exploratorio y Estadístico (analysis.py)
+
+- `analysis.py` genera insights y visualizaciones:
+  - Goles/asistencias por temporada, año, mes, edad.
+  - Comparación local vs visitante.
+  - Distribuciones de minutos por edad.
+  - Gráficas tipo KPI, barras, dispersión.
+
+📊 Ejemplos visuales generados:
+```
+📌 ./images/goles_por_año.png
+📌 ./images/lamine_goles_asistencias_por_edad.png
+📌 ./images/local_vs_visitante.png
+```
+
+---
+
+### 4. Dashboard en Power BI
+
+- Power BI centraliza el análisis visual y storytelling del proyecto.
+- Interactividad total: serás capaz de filtrar por jugador, equipo, competición, si fue titular o suplente, etc.
+- Análisis visual de evolución por temporada, resultado, rival.
+
+🎥 ![Demo Dashboard](gifs/Home_page_table.gif)
+🎥 ![Demo Dashboard](gifs/Messi.gif)
+🎥 ![Demo Dashboard](gifs/Lamine.gif)
+🎥 ![Demo Dashboard](gifs/Versus.gif)
+🎥 ![Demo Dashboard](gifs/Conclusions.gif)
+
+---
+
+### 5. Contrastes de Hipótesis
+
+En `Tests.ipynb`, se aplicaron contrastes de hipótesis para comparar a ambos jugadores hasta los 18 años.
+
+**Ejemplos:**
+- ¿Quién contribuye más en goles + asistencias por minuto?
+- ¿Quién ha jugado más minutos por partido?
+- ¿Quién ha dado más asistencias por partido?
+
+Cada prueba incluye:
+- Estadístico t
+- p-value
+- Interpretación clara (significativa o no)
+
+---
+
+## 🚀 Ejecución
 
 ```bash
-# 1. Clona el repositorio
-$ git clone https://github.com/tu_usuario/tu_repositorio.git
-$ cd tu_repositorio
+# 1. Clona el repo
+git clone https://github.com/JuanmaCM7/Messi_career_stats.git
+cd Players_career_stats
 
-# 2. Crea entorno e instala dependencias
-$ pip install -r requirements.txt
+# 2. Instala dependencias
+pip install -r requirements.txt
+# o con conda
+conda env create -f environment.yml
 
-# 3. Ejecuta el proyecto completo (si main.py está configurado)
-$ python src/main.py
+# 3. Ejecuta el flujo completo, generando los csvs, imágenes en png y abriendo PowerBI
+python src/main.py
 ```
 
----
-
-## 🔹 Resultados Destacados
-
-- **Messi**: supera los 700 goles con un promedio de un gol cada XX minutos.
-- **Lamine**: destaca por su carga de minutos a edad temprana, especialmente en selección.
-- Los gráficos comparativos permiten visualizar estilos de carrera opuestos pero igualmente prometedores.
-- Se observa un patrón de mayor productividad de Messi como local, mientras que Lamine mantiene consistencia en ambos contextos.
+🎥 ![Demo Main.py](gifs/exec_mainpy.gif)
 
 ---
 
-## 📈 Capturas y Visuales
+## 🧠 ¿Qué preguntas podrás responder gracias a este proyecto?
 
-> Aquí puedes incrustar capturas del dashboard, de las gráficas generadas o un video/gif de navegación por el dashboard en Power BI.
-
-Ejemplo:
-```
-![Dashboard Overview](designs/BG%20profile.png)
-```
+- ¿Quién ha tenido mayor impacto antes de los 18 años?
+- ¿Cómo han evolucionado en minutos, goles y asistencias?
+- ¿Qué diferencias hay entre jugar en club y selección?
+- ¿En qué contextos (edad, competición, rival) se desempeñan mejor?
 
 ---
 
-## 💚 Transparencia
+## 🧩 Herramientas Usadas
 
-Este proyecto ha sido desarrollado de forma individual, con comprensión plena de cada línea de código, incluyendo funciones sugeridas por IA. Se ha hecho especial énfasis en la limpieza de datos, validación de resultados y narrativa visual.
+- Python (Pandas, Matplotlib, Plotly, Statsmodels, Scikit-learn)
+- BeautifulSoup & Requests (Scraping)
+- Power BI (Visualización interactiva)
+- Jupyter Notebook (Experimentación)
+- Git & GitHub
 
 ---
 
-## 🎓 Autor
+## 👨‍💻 Autor
 
-- **Nombre:** Juan Manuel Cano Mayor
+- **Juan Manuel Cano Mayor**
 - **Email:** juacanom@gmail.com
-- **Curso:** Data Science & AI - Abril 2025
-- **Profesorado:** Evolve Academy
+- **Curso:** Data Science & AI - Evolve Academy (Abril 2025)
 
 ---
 
-¡Gracias por tu tiempo y atención! 🌟
+## 📬 Notas Finales
+
+Este proyecto está diseñado para que, en un futuro, pueda ser reproducible y adaptable a otras disciplinas. Se buscó demostrar cómo los datos pueden contar historias más allá de los goles: hablan de confianza, talento, rendimiento inmediato, y sobre todo, del potencial con el que cuenta Lamine Yamal y la increíble e inmaculada carrera de Lionel Messi.
+
+🥳 Hasta aquí este proyecto. Muchas gracias por leerme y espero que puedas disfrutar de la historia que tre he contado.
+
+
 
 
 

@@ -42,16 +42,21 @@ def goals_by_season(df, save=False):
     plt.show()
 
 def goals_by_competition(df, save=False):
-    """Goles según la competición (La Liga, Champions, etc.)."""
-    goles_por_competicion = df.groupby('Competition')['Goals'].sum().sort_values(ascending=False)
-    print("\n🏆 Goles por competición:\n", goles_por_competicion)
+    """Muestra las 5 competiciones donde Messi ha marcado más goles."""
+    # Agrupar y seleccionar el Top 5
+    top_competiciones = df.groupby("Competition")["Goals"].sum().sort_values(ascending=False).head(5)
+    print("\n🏆 Top competiciones con más goles:\n", top_competiciones)
 
-    goles_por_competicion.plot(kind='bar', title='Goles por Competición', xlabel='Competición', ylabel='Goles')
+    # Crear gráfico
+    top_competiciones.plot(kind="bar", title="Top competiciones con más goles de Leo Messi", xlabel="Competición", ylabel="Goles")
     plt.tight_layout()
+
     if save:
-        plt.savefig(images_path / "goles_por_competicion.png")
-        print("🖼️ Guardado: goles_por_competicion.png")
+        plt.savefig(images_path / "top_competiciones_messi.png")
+        print("🖼️ Guardado: top_competiciones_messi.png")
+
     plt.show()
+
 
 def goals_per_minute(df):
     """Promedio de minutos por gol (minutos jugados / goles marcados)."""
@@ -69,19 +74,27 @@ def average_goals_per_match(df):
     print(f"📊 Promedio de goles por partido: {promedio:.2f}")
 
 def assists_total_and_by_season(df, save=False):
-    """Total de asistencias + asistencias por temporada."""
+    """Muestra el total de asistencias y su evolución por temporada, ordenadas cronológicamente."""
+    
+    # Calcular el total
     total = df['Assists'].sum()
     print(f"🎯 Total de asistencias: {total}")
 
-    asistencias_por_temporada = df.groupby('Season')['Assists'].sum().sort_values(ascending=False)
-    print("\n📅 Asistencias por temporada:\n", asistencias_por_temporada)
+    # Agrupar por temporada y ordenar de más antigua a más moderna
+    asistencias_por_temporada = df.groupby('Season')['Assists'].sum().sort_index()
+    print("\n📅 Asistencias por temporada (ordenadas cronológicamente):\n", asistencias_por_temporada)
 
+    # Crear gráfico
     asistencias_por_temporada.plot(kind='bar', title='Total de Asistencias por Temporada', xlabel='Temporada', ylabel='Asistencias')
     plt.tight_layout()
+
+    # Guardar si se desea
     if save:
         plt.savefig(images_path / "asistencias_por_temporada.png")
         print("🖼️ Guardado: asistencias_por_temporada.png")
+
     plt.show()
+
 
 def goals_by_month(df, save=False):
     """Distribución de goles por mes del año."""

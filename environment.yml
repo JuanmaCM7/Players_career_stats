@@ -27,6 +27,7 @@ dependencies:
   - fonttools=4.55.3=py313h827c3e9_0
   - freetype=2.12.1=ha860e81_0
   - h11=0.14.0=py313haa95532_0
+  - icc_rt=2022.1.0=h6049295_2
   - icu=73.1=h6c2663c_0
   - idna=3.7=py313haa95532_0
   - intel-openmp=2023.1.0=h59b6b97_46320
@@ -72,6 +73,7 @@ dependencies:
   - packaging=24.2=py313haa95532_0
   - pandas=2.2.3=py313h5da7b33_0
   - parso=0.8.4=py313haa95532_0
+  - patsy=1.0.1=py313haa95532_0
   - pillow=11.1.0=py313h096bfcc_0
   - pip=25.0=py313haa95532_0
   - platformdirs=3.10.0=py313haa95532_0
@@ -100,6 +102,7 @@ dependencies:
   - qtwebchannel=6.7.3=h5da7b33_0
   - qtwebsockets=6.7.3=h5da7b33_0
   - requests=2.32.3=py313haa95532_1
+  - scipy=1.15.2=py313hd4070db_1
   - seaborn=0.13.2=py313haa95532_2
   - selenium=4.24.0=py313h827c3e9_0
   - setuptools=72.1.0=py313haa95532_0
@@ -110,6 +113,7 @@ dependencies:
   - soupsieve=2.5=py313haa95532_0
   - sqlite=3.45.3=h2bbff1b_0
   - stack_data=0.2.0=pyhd3eb1b0_0
+  - statsmodels=0.14.4=py313h827c3e9_0
   - tbb=2021.8.0=h59b6b97_0
   - tenacity=9.0.0=py313haa95532_0
   - tk=8.6.14=h0416ee5_0
@@ -134,6 +138,7 @@ dependencies:
   - pip:
       - fastjsonschema==2.21.1
       - greenlet==3.1.1
+      - joblib==1.4.2
       - jsonschema==4.23.0
       - jsonschema-specifications==2024.10.1
       - mysql-connector-python==9.2.0
@@ -142,6 +147,8 @@ dependencies:
       - python-dotenv==1.1.0
       - referencing==0.36.2
       - rpds-py==0.24.0
+      - scikit-learn==1.6.1
       - sqlalchemy==2.0.40
+      - threadpoolctl==3.6.0
       - webdriver-manager==4.0.2
 prefix: C:\Users\juanm\miniconda3\envs\jcmdc_proy_abril

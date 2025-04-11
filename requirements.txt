@@ -43,6 +43,7 @@ outcome @ file:///C:/b/abs_774iyc6vgh/croot/outcome_1741014061865/work
 packaging @ file:///C:/b/abs_3by6s2fa66/croot/packaging_1734472138782/work
 pandas @ file:///C:/b/abs_e18w9ay4we/croot/pandas_1732735115740/work/dist/pandas-2.2.3-cp313-cp313-win_amd64.whl#sha256=89153934c68f42239148879a6c0fd8bb5004e767550db26257dc4551ad0414d7
 parso @ file:///C:/b/abs_834b4mj92b/croot/parso_1733963322289/work
+patsy @ file:///C:/b/abs_f9h0eiedk0/croot/patsy_1738159949276/work
 pillow @ file:///C:/b/abs_b50vowcrzo/croot/pillow_1738010273782/work
 platformdirs @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/platformdirs_1729038057530/work
 plotly @ file:///C:/b/abs_28qon8a90a/croot/plotly_1740385581534/work
@@ -64,6 +65,7 @@ pyzmq @ file:///C:/b/abs_f3yte6j5yn/croot/pyzmq_1734711069724/work
 referencing==0.36.2
 requests @ file:///C:/b/abs_c3508vg8ez/croot/requests_1731000584867/work
 rpds-py==0.24.0
+scipy @ file:///C:/b/abs_57lp_c7nt4/croot/scipy_1743153260151/work/dist/scipy-1.15.2-cp313-cp313-win_amd64.whl#sha256=ecbbf6ec98059443ad65097411c0a3bd32c0c8d59fbe6d3ccb5dacc3c4a2745f
 seaborn @ file:///C:/b/abs_522_0_dy9p/croot/seaborn_1741187268016/work
 selenium @ file:///C:/Users/dev-admin/buildout/croot/selenium_1742600541494/work
 setuptools==72.1.0
@@ -74,6 +76,7 @@ sortedcontainers @ file:///tmp/build/80754af9/sortedcontainers_1623949099177/wor
 soupsieve @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/soupsieve_1729039543636/work
 SQLAlchemy==2.0.40
 stack-data @ file:///opt/conda/conda-bld/stack_data_1646927590127/work
+statsmodels @ file:///C:/b/abs_c797jbabmm/croot/statsmodels_1734018887218/work
 tenacity @ file:///C:/Users/dev-admin/buildout/perseverance-python-buildout/croot/tenacity_1731701966482/work
 tornado @ file:///C:/Users/dev-admin/buildout/croot/tornado_1735843426044/work
 traitlets @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/traitlets_1729038154689/work

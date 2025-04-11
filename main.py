@@ -49,8 +49,27 @@ if __name__ == "__main__":
     print("\n📊 Análisis Lamine Yamal:")
     run_analysis_lamine(df_lamine)
 
-    # Fin del proceso
+    # Fin del proceso de rceación de datos e imágenes
     print("\n✅ Todo listo. CSVs generados y análisis completos.")
+
+# Abrir nuestro dahboard en PowerBI
+
+from pathlib import Path
+import subprocess
+
+# Obtener la raíz del proyecto dinámicamente (donde está el main.py)
+project_root = Path(__file__).resolve().parent
+
+# Ruta relativa al archivo de Power BI
+dashboard_path = project_root / "dashboard" / "Players_career_data.pbix"
+
+# Abrir el archivo
+try:
+    print(f"\n📂 Abriendo el dashboard de Power BI...")
+    subprocess.Popen([str(dashboard_path)], shell=True)
+except Exception as e:
+    print(f"⚠️ No se pudo abrir el archivo de Power BI: {e}")
+
 
 
 
